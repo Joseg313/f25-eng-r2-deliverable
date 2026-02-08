@@ -13,7 +13,7 @@ import {
 type Species = Database["public"]["Tables"]["species"]["Row"]
 
 export default function SpeciesDetailsDialog({ species }: { species: Species }) {
-  
+
 
 
   return (
@@ -26,8 +26,15 @@ export default function SpeciesDetailsDialog({ species }: { species: Species }) 
           <DialogTitle>{species.scientific_name}</DialogTitle>
             {species.common_name && <DialogDescription>{species.common_name}</DialogDescription>}
         </DialogHeader>
+        {species.total_population  && <DialogDescription><b>Population:</b> {species.total_population}</DialogDescription>}
+        {species.kingdom  && <DialogDescription><b>Kingdom:</b> {species.kingdom}</DialogDescription>}
+        {species.description  && <DialogDescription><b>Description: </b> {species.description}</DialogDescription>}
+
+
+
         {/* TODO: form*/}
       </DialogContent>
+
     </Dialog>
   );
 }
