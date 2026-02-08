@@ -146,8 +146,9 @@ export default function EditSpeciesDialog({ species }: { species: Species }) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {/*The button from the old form was ugly when displayed on species-details-dialog, so it has been changed*/}
-        <Button variant="secondary">
-          <Icons.add className="mr-3 h-5 w-5" />
+        {/*Button now uses file icon for "edit" and is set to default */}
+        <Button variant="default">
+          <Icons.page className="mr-3 h-5 w-5" />
           Edit Species
         </Button>
       </DialogTrigger>
