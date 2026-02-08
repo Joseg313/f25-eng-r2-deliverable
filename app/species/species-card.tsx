@@ -16,7 +16,7 @@ import Image from "next/image";
 import SpeciesDetailsDialog from "./species-details-dialog"
 type Species = Database["public"]["Tables"]["species"]["Row"];
 
-export default function SpeciesCard({ species }: { species: Species }) {
+export default function SpeciesCard({ species,sessionId }: { species: Species; sessionId: string | null }) {
   return (
     <div className="m-4 w-72 min-w-72 flex-none rounded border-2 p-3 shadow">
       {species.image && (
@@ -27,8 +27,8 @@ export default function SpeciesCard({ species }: { species: Species }) {
       <h3 className="mt-3 text-2xl font-semibold">{species.scientific_name}</h3>
       <h4 className="text-lg font-light italic">{species.common_name}</h4>
       <p>{species.description ? species.description.slice(0, 150).trim() + "..." : ""}</p>
-      <SpeciesDetailsDialog species={species} />
-      {/*<Button className="mt-3 w-full">Learn More</Button>*/}
+      <SpeciesDetailsDialog species={species} sessionId={sessionId} />
+      
     </div>
   );
 }

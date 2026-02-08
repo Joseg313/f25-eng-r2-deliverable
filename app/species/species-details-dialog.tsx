@@ -1,20 +1,24 @@
-import type { Database } from "@/lib/schema";
-import { Icons } from "@/components/icons";
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-type Species = Database["public"]["Tables"]["species"]["Row"]
+import type { Database } from "@/lib/schema";
 
-export default function SpeciesDetailsDialog({ species }: { species: Species }) {
+import EditSpeciesDialog from "./edit-species-dialog"
+type Species = Database["public"]["Tables"]["species"]["Row"];
 
 
+
+export default function SpeciesDetailsDialog({ species, sessionId }: { species: Species; sessionId: string | null }) {
+  {/*isAuthor checks to see if the current user logged in is the same as the one who authored the species */}
+  const isAuthor = sessionId === species.author;
 
   return (
     <Dialog>
@@ -24,17 +28,36 @@ export default function SpeciesDetailsDialog({ species }: { species: Species }) 
       <DialogContent className="max-h-screen overflow-y-auto sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>{species.scientific_name}</DialogTitle>
-            {species.common_name && <DialogDescription>{species.common_name}</DialogDescription>}
+          {species.common_name && <DialogDescription>{species.common_name}</DialogDescription>}
         </DialogHeader>
-        {species.total_population  && <DialogDescription><b>Population:</b> {species.total_population}</DialogDescription>}
-        {species.kingdom  && <DialogDescription><b>Kingdom:</b> {species.kingdom}</DialogDescription>}
-        {species.description  && <DialogDescription><b>Description: </b> {species.description}</DialogDescription>}
+        {species.total_population && (
+          <DialogDescription>
+            <b>Population:</b> {species.total_population}
+          </DialogDescription>
+        )}
+        {species.kingdom && (
+          <DialogDescription>
+            <b>Kingdom:</b> {species.kingdom}
+          </DialogDescription>
+        )}
+        {species.description && (
+          <DialogDescription>
+            <b>Description: </b> {species.description}
+          </DialogDescription>
+        )}
 
 
+        {/* Only show the EditSpeciesDialog button if the author is the current user logged in*/}
+        {isAuthor && <EditSpeciesDialog species={species}/>}
 
-        {/* TODO: form*/}
+
+        {/*planning for form
+          Show the edit button only if current user was one to input species
+          onclick of edit button, open up form editing.
+        */}
+
+
       </DialogContent>
-
     </Dialog>
   );
 }
