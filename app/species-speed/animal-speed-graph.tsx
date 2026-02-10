@@ -35,7 +35,7 @@ export default function AnimalSpeedGraph() {
       };
     })
     .then((d) => {
-      console.log(animalData)
+      console.log(d)
       setAnimalData(d as AnimalDatum[]);
     })
     .catch((err) => {
@@ -56,9 +56,11 @@ export default function AnimalSpeedGraph() {
     const containerHeight = graphRef.current?.clientHeight ?? 500;
 
     // Set up chart dimensions and margins
-    const width = Math.max(containerWidth, 600); // Minimum width of 600px
-    const height = Math.max(containerHeight, 400); // Minimum height of 400px
-    const margin = { top: 70, right: 60, bottom: 80, left: 100 };
+    const margin = { top: 70, right: 150, bottom: 80, left: 100 };
+    const width = Math.max(containerWidth, 800); // Minimum width of 800px
+    const height = Math.max(containerHeight, 500); // Minimum height of 500px
+    const innerWidth = width - margin.left - margin.right;
+    const innerHeight = height - margin.top - margin.bottom;
 
     // Create the SVG element where D3 will draw the chart
     // https://github.com/d3/d3-selection
@@ -67,6 +69,10 @@ export default function AnimalSpeedGraph() {
       .attr("width", width)
       .attr("height", height)
 
+    // Create a group element with margins applied
+    const chart = svg.append('g')
+      .attr('transform', `translate(${margin.left},${margin.top})`);
+
     // TODO: Implement the rest of the graph
     // HINT: Look up the documentation at these links
     // https://github.com/d3/d3-scale#band-scales
@@ -74,60 +80,70 @@ export default function AnimalSpeedGraph() {
     // https://github.com/d3/d3-scale#ordinal-scales
     // https://github.com/d3/d3-axis
 
+    // Sort animals by diet to group them together
+    const sortedData = [...animalData].sort((a, b) => {
+      const dietOrder = { 'Carnivore': 0, 'Herbivore': 1, 'Omnivore': 2 };
+      return dietOrder[a.diet] - dietOrder[b.diet];
+    });
+
     const x = scaleBand()
       //for animal names
-      .range([0, width])
-      .padding(0.1)
-      .domain(animalData.map(function (d) {return d.name;}));
+      .range([0, innerWidth])
+      .padding(0.5)
+      .domain(sortedData.map(function (d) {return d.name;}));
 
     const y = scaleLinear()
       // for speeds
-      .range([height, 0])
-      .domain([0, max(animalData, function (d) { return d.speed; })])
+      .range([innerHeight, 0])
+      .domain([0, max(animalData, function (d) { return d.speed; }) ?? 0])
 
     const color = scaleOrdinal<string>()
       // for coloring by diet
       .domain(['Carnivore', 'Herbivore', 'Omnivore'])
       .range(['#ef4444', '#22c55e', '#3b82f6'])
 
-    svg.append('g')
-      .attr("transform", `translate(0,${height})`)
+    // Add X axis
+    chart.append('g')
+      .attr("transform", `translate(0,${innerHeight})`)
       .call(axisBottom(x))
-      .selectAll("text") // Rotate labels if they overlap
+      .selectAll("text") 
         .attr("transform", "translate(-10,0)rotate(-45)")
         .style("text-anchor", "end");
 
-    svg.append("text")
-      .attr("text-anchor", "end")
-      .attr("x", width / 2 + margin.left)
-      .attr("y", height + margin.top + 15)
+    // Add X axis label
+    chart.append("text")
+      .attr("text-anchor", "middle")
+      .attr("x", innerWidth / 2)
+      .attr("y", innerHeight + 60)
       .text("Animal");
 
-
-    svg.append("g")
+    // Add Y axis
+    chart.append("g")
       .call(axisLeft(y));
 
-    svg.append("text")
-      .attr("text-anchor", "end")
+    // Add Y axis label
+    chart.append("text")
+      .attr("text-anchor", "middle")
       .attr("transform", "rotate(-90)")
-      .attr("y", -margin.left + 20)
-      .attr("x", -height / 2 + margin.top)
+      .attr("y", -60)
+      .attr("x", -innerHeight / 2)
       .text("Speed (km/h)");
 
-    svg.selectAll("mybar")
-      .data(animalData)
+    // Add bars
+    chart.selectAll("mybar")
+      .data(sortedData)
       .join("rect")
         .attr("x", d => x(d.name)!)
         .attr("y", d => y(d.speed))
         .attr("width", x.bandwidth())
-        .attr("height", d => height - y(d.speed))
+        .attr("height", d => innerHeight - y(d.speed))
         .attr("fill", d => color(d.diet));
 
-
+    //  legend
     const diets = ["Carnivore", "Herbivore", "Omnivore"];
 
-    const legend = svg.append("g")
-      .attr("transform", `translate(${width + 20}, 0)`); // Position to the right
+    const legend = chart.append("g")
+      .attr("transform", `translate(${innerWidth + 20}, 0)`);
 
     diets.forEach((diet, i) => {
       const legendRow = legend.append("g")
@@ -140,17 +156,18 @@ export default function AnimalSpeedGraph() {
 
 
     legendRow.append("text")
-        .attr("x", 20)
-        .attr("y", 12)
-        .style("font-size", "14px")
-        .text(diet);
+      .attr("x", 20)
+      .attr("y", 12)
+      .style("fill", "white")
+      .style("font-size", "14px")
+      .text(diet);
     });
   }, [animalData]);
 
-  // TODO: Return the graph
+  // done TODO: Return the graph
   return (
-    // Placeholder so that this compiles. Delete this below:
-    <div>
+
+    <div className="p-4 border rounded shadow-sm">
       <h2 className="text-xl font-bold mb-4">Animal Speeds</h2>
       <div ref={graphRef}></div>
 
