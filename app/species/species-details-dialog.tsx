@@ -23,7 +23,8 @@ export default function SpeciesDetailsDialog({ species, sessionId }: { species: 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="mt-3 w-full">Learn More</Button>
+        {/*Button below needs to be edited so that it stay at bottom of card */}
+        <Button className="position:absolute; mt-3 w-full">Learn More</Button>
       </DialogTrigger>
       <DialogContent className="max-h-screen overflow-y-auto sm:max-w-[600px]">
         <DialogHeader>
@@ -53,7 +54,8 @@ export default function SpeciesDetailsDialog({ species, sessionId }: { species: 
 
         {/*planning for form
           Show the edit button only if current user was one to input species
-          onclick of edit button, open up form editing.
+          onclick of edit button, open up form for editing with current data
+          filled out already.
         */}
 
 

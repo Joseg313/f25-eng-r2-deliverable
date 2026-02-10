@@ -27,8 +27,9 @@ export default function SpeciesCard({ species,sessionId }: { species: Species; s
       <h3 className="mt-3 text-2xl font-semibold">{species.scientific_name}</h3>
       <h4 className="text-lg font-light italic">{species.common_name}</h4>
       <p>{species.description ? species.description.slice(0, 150).trim() + "..." : ""}</p>
-      <SpeciesDetailsDialog species={species} sessionId={sessionId} />
-      
+      {/*Change the details button to always be at the bottom of the card and not bottom of text */}
+      <SpeciesDetailsDialog  species={species} sessionId={sessionId} />
+
     </div>
   );
 }
