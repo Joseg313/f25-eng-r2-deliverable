@@ -27,7 +27,7 @@ const handleSubmit = async () => {
     body: JSON.stringify({ message })
 
   });
-  const data: {response: string} = await response.json();
+  const data = await response.json() as {response: string};
   setChatLog(prev => [...prev, { role: "bot", content: data.response }]);
 
   if (textareaRef.current) {

@@ -31,7 +31,7 @@ export default function AnimalSpeedGraph() {
       return {
         name: d.Animal,
         diet: d.Diet as AnimalDatum['diet'],
-        speed: +d.AverageSpeed
+        speed: +(d.AverageSpeed ?? '0')
       };
     })
     .then((d) => {

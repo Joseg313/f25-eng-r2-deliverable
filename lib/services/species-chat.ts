@@ -24,5 +24,5 @@ export async function generateResponse(message: string): Promise<string> {
 
   });
 
-  return completion.choices[0].message.content || "Unable to generate response."
+  return completion.choices[0]?.message?.content || "Unable to generate response."
 }

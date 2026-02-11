@@ -3,7 +3,7 @@ import { generateResponse } from "@/lib/services/species-chat";
 
 // done TODO: Implement this file
 export async function POST(request: Request) {
-  const { message } = await request.json();
+  const { message } = await request.json() as { message: string };
 
   const response = await generateResponse(message);
   return Response.json({ response })
