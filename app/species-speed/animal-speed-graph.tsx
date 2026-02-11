@@ -73,7 +73,7 @@ export default function AnimalSpeedGraph() {
     const chart = svg.append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
-    // TODO: Implement the rest of the graph
+    // done TODO: Implement the rest of the graph
     // HINT: Look up the documentation at these links
     // https://github.com/d3/d3-scale#band-scales
     // https://github.com/d3/d3-scale#linear-scales
@@ -106,7 +106,7 @@ export default function AnimalSpeedGraph() {
     chart.append('g')
       .attr("transform", `translate(0,${innerHeight})`)
       .call(axisBottom(x))
-      .selectAll("text") 
+      .selectAll("text")
         .attr("transform", "translate(-10,0)rotate(-45)")
         .style("text-anchor", "end");
 

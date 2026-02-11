@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { generateResponse } from "@/lib/services/species-chat";
 
-// TODO: Implement this file
+// done TODO: Implement this file
 export async function POST(request: Request) {
   const { message } = await request.json();
 
