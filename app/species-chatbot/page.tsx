@@ -17,7 +17,22 @@ export default function SpeciesChatbot() {
   };
 
 const handleSubmit = async () => {
-  // TODO: Implement this function
+  // done TODO: Implement this function
+  if (!message.trim()) return;
+  setMessage("")
+  setChatLog([...chatLog, {role: 'user', content:message}]);
+  const response = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message })
+
+  });
+  const data: {response: string} = await response.json();
+  setChatLog(prev => [...prev, { role: "bot", content: data.response }]);
+
+  if (textareaRef.current) {
+    textareaRef.current.style.height = "auto";
+  }
 }
 
 return (
@@ -72,7 +87,7 @@ return (
           />
           <button
             type="button"
-            onClick={() => void handleSubmit()}
+            onClick={() => void  handleSubmit()}
             className="mt-2 rounded bg-primary px-4 py-2 text-background transition hover:opacity-90"
           >
             Enter
